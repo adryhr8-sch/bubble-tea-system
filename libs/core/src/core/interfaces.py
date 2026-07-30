@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Optional
 
-from database.models import User, Tea
+from database.models import Tea, User
+
 
 # Interfaz 1: Repositorio de Usuarios
 class IUserRepository(ABC):
@@ -10,7 +10,7 @@ class IUserRepository(ABC):
         pass
     
     @abstractmethod
-    def find_by_id(self, id: int) -> Optional[User]:
+    def find_by_id(self, id: int) -> User | None:
         pass
     
     @abstractmethod

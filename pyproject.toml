@@ -11,6 +11,11 @@ dev = [
     "ruff>=0.16.0",
 ]
 
+[tool.ruff.lint]
+ignore = [
+    "BLE001",
+]
+
 [tool.behave]
 paths = [
     "tests/features",

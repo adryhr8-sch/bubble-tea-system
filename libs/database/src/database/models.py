@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Optional, List
 
 
 class OrderStatus(Enum):
@@ -33,7 +32,7 @@ class IceLevel(Enum):
 
 @dataclass
 class User:
-    id: Optional[int]
+    id: int | None
     name: str
     email: str
     password: str
@@ -42,7 +41,7 @@ class User:
 
 @dataclass
 class Tea:
-    id: Optional[int]
+    id: int | None
     name: str
     price: float
     available: bool
@@ -51,7 +50,7 @@ class Tea:
 
 @dataclass
 class Topping:
-    id: Optional[int]
+    id: int | None
     name: str
     price: float
     stock: int
@@ -60,33 +59,33 @@ class Topping:
 
 @dataclass
 class CustomizedDrink:
-    id: Optional[int]
+    id: int | None
     tea_id: int
     size: TeaSize
     sugar_level: SugarLevel
     ice_level: IceLevel
-    toppings: List[Topping]
+    toppings: list[Topping]
     price: float
     created_at: datetime
 
 
 @dataclass
 class Order:
-    id: Optional[int]
+    id: int | None
     user_id: int
-    items: List[dict]
+    items: list[dict]
     total_price: float
     status: OrderStatus
     payment_method: str
     payment_status: str
     order_number: str
     created_at: datetime
-    updated_at: Optional[datetime]
+    updated_at: datetime | None
 
 
 @dataclass
 class OrderStatusUpdate:
-    id: Optional[int]
+    id: int | None
     order_id: int
     old_status: OrderStatus
     new_status: OrderStatus

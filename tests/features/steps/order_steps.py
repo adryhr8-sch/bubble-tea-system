@@ -1,12 +1,16 @@
-from behave import given, when, then, step
-
 from unittest.mock import MagicMock
 
-from services.services import OrderService, StandardPriceCalculator
-from services.payments import CardPaymentProcessor
-from database.repositories import OrderRepository, UserRepository, ToppingRepository, OrderStatusUpdateRepository
-from database.models import Tea
+from behave import given, step, then, when
 from core.exceptions import PaymentRejectedError
+from database.models import Tea
+from database.repositories import (
+    OrderRepository,
+    OrderStatusUpdateRepository,
+    ToppingRepository,
+    UserRepository,
+)
+from services.payments import CardPaymentProcessor
+from services.services import OrderService, StandardPriceCalculator
 
 
 @given('que el cliente tiene productos en el carrito')

@@ -1,5 +1,5 @@
-from core.interfaces import IPaymentProcessor
 from core.exceptions import PaymentRejectedError
+from core.interfaces import IPaymentProcessor
 
 
 class CardPaymentProcessor(IPaymentProcessor):

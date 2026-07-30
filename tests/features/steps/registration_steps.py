@@ -1,10 +1,9 @@
-from behave import given, when, then, step
-
 from unittest.mock import MagicMock
 
-from services.services import UserService
-from database.repositories import UserRepository
+from behave import given, step, then, when
 from core.exceptions import DuplicateEmailError, InvalidPasswordError
+from database.repositories import UserRepository
+from services.services import UserService
 
 
 # ============= GIVEN STEPS =============
