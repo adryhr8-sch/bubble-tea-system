@@ -1,11 +1,20 @@
-from typing import List
-from datetime import datetime
 import hashlib
+from datetime import datetime
 
-from database.models import OrderStatusUpdate, User, Order, OrderStatus, Tea
-from database.repositories import OrderRepository, ToppingRepository, OrderStatusUpdateRepository, TeaRepository
-from core.interfaces import IUserRepository, IPaymentProcessor, IPriceCalculator
-from core.exceptions import InvalidPasswordError, DuplicateEmailError, InsufficientStockError, DuplicateTeaError
+from core.exceptions import (
+    DuplicateEmailError,
+    DuplicateTeaError,
+    InsufficientStockError,
+    InvalidPasswordError,
+)
+from core.interfaces import IPaymentProcessor, IPriceCalculator, IUserRepository
+from database.models import Order, OrderStatus, OrderStatusUpdate, Tea, User
+from database.repositories import (
+    OrderRepository,
+    OrderStatusUpdateRepository,
+    TeaRepository,
+    ToppingRepository,
+)
 
 
 class UserService:
@@ -19,7 +28,7 @@ class UserService:
             raise DuplicateEmailError("El correo ya está registrado")
         
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
-        user = User(id=None, name=name, email=email, password=hashed_password, created_at=datetime.now())
+        user = User(id=None, name=name, email=email, password=hashed_password, created_at=datetime.now().astimezone())
         return self.user_repo.save(user)
 
 
@@ -27,7 +36,7 @@ class StandardPriceCalculator(IPriceCalculator):
     def __init__(self, topping_repo: ToppingRepository):
         self.topping_repo = topping_repo
 
-    def calculate(self, tea, size: str, toppings: List[str]) -> float:
+    def calculate(self, tea, size: str, toppings: list[str]) -> float:
         size_multipliers = {"Pequeño": 1.0, "Mediano": 1.3, "Grande": 1.6}
         multiplier = size_multipliers.get(size, 1.0)
         price = tea.price * multiplier
@@ -52,7 +61,7 @@ class TeaService:
             name=name,
             price=price,
             available=True,
-            created_at=datetime.now()
+            created_at=datetime.now().astimezone()
         )
         return self.tea_repo.save(tea)
     
@@ -92,7 +101,7 @@ class OrderService:
         
         old_status = order.status
         order.status = new_status
-        order.updated_at = datetime.now()
+        order.updated_at = datetime.now().astimezone()
         
         # Registrar el historial del cambio de estado
         status_update = OrderStatusUpdate(
@@ -100,7 +109,7 @@ class OrderService:
             order_id=order_id,
             old_status=old_status,
             new_status=new_status,
-            updated_at=datetime.now(),
+            updated_at=datetime.now().astimezone(),
             updated_by=employee_id
         )
         self.status_update_repo.save(status_update)
@@ -110,7 +119,7 @@ class OrderService:
     def create_order(
         self, 
         user_id: int, 
-        items: List[dict], 
+        items: list[dict], 
         payment_processor: IPaymentProcessor
     ) -> Order:
         user = self.user_repo.find_by_id(user_id)
@@ -160,7 +169,7 @@ class OrderService:
             payment_method=payment_processor.__class__,
             payment_status=payment_status,
             order_number="",
-            created_at=datetime.now(),
+            created_at=datetime.now().astimezone(),
             updated_at=None
         )
         

@@ -1,7 +1,6 @@
 import sqlite3
 from pathlib import Path
 
-
 BASE_DIR = Path(__file__).resolve().parents[4]
 
 DATABASE_NAME = BASE_DIR / "bubble_tea.db"

@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 
-from services.services import UserService
 from database.repositories import UserRepository
+from services.services import UserService
 
 
 def before_scenario(context, scenario):
@@ -33,4 +33,3 @@ def before_scenario(context, scenario):
 
 def after_scenario(context, scenario):
     """Limpieza después de cada escenario"""
-    pass

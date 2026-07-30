@@ -1,11 +1,10 @@
-from behave import given, when, then, step
-
 from unittest.mock import MagicMock
 
-from services.services import OrderService, StandardPriceCalculator
-from database.repositories import TeaRepository, ToppingRepository, OrderRepository
-from database.models import Tea, Topping
+from behave import given, step, then, when
 from core.exceptions import InsufficientStockError
+from database.models import Tea, Topping
+from database.repositories import OrderRepository, TeaRepository, ToppingRepository
+from services.services import OrderService, StandardPriceCalculator
 
 
 # ============= GIVEN STEPS =============

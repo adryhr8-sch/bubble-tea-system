@@ -1,11 +1,10 @@
-from abc import ABC, abstractmethod
-from typing import Optional, List
-from datetime import datetime
 import random
 import string
+from abc import ABC, abstractmethod
+from datetime import datetime
 
-from .models import User, Tea, Topping, Order, OrderStatusUpdate
 from .database import get_connection
+from .models import Order, OrderStatusUpdate, Tea, Topping, User
 
 
 class BaseRepository(ABC):
@@ -34,13 +33,13 @@ class UserRepository(BaseRepository):
         self._users[user.id] = user
         return user
     
-    def find_by_id(self, id: int) -> Optional[User]:
+    def find_by_id(self, id: int) -> User | None:
         return self._users.get(id)
     
-    def find_all(self) -> List[User]:
+    def find_all(self) -> list[User]:
         return list(self._users.values())
     
-    def find_by_email(self, email: str) -> Optional[User]:
+    def find_by_email(self, email: str) -> User | None:
         for user in self._users.values():
             if user.email == email:
                 return user
@@ -62,13 +61,13 @@ class TeaRepository(BaseRepository):
         self._teas[tea.id] = tea
         return tea
     
-    def find_by_id(self, id: int) -> Optional[Tea]:
+    def find_by_id(self, id: int) -> Tea | None:
         return self._teas.get(id)
     
-    def find_all(self) -> List[Tea]:
+    def find_all(self) -> list[Tea]:
         return list(self._teas.values())
     
-    def find_by_name(self, name: str) -> Optional[Tea]:
+    def find_by_name(self, name: str) -> Tea | None:
         for tea in self._teas.values():
             if tea.name == name:
                 return tea
@@ -90,13 +89,13 @@ class ToppingRepository(BaseRepository):
         self._toppings[topping.id] = topping
         return topping
     
-    def find_by_id(self, id: int) -> Optional[Topping]:
+    def find_by_id(self, id: int) -> Topping | None:
         return self._toppings.get(id)
     
-    def find_all(self) -> List[Topping]:
+    def find_all(self) -> list[Topping]:
         return list(self._toppings.values())
     
-    def find_by_name(self, name: str) -> Optional[Topping]:
+    def find_by_name(self, name: str) -> Topping | None:
         for topping in self._toppings.values():
             if topping.name == name:
                 return topping
@@ -119,17 +118,17 @@ class OrderRepository(BaseRepository):
     
     def _generate_order_number(self) -> str:
         prefix = "BT"
-        timestamp = datetime.now().strftime("%Y%m%d")
+        timestamp = datetime.now().astimezone().strftime("%Y%m%d")
         random_part = ''.join(random.choices(string.digits, k=6))
         return f"{prefix}{timestamp}{random_part}"
     
-    def find_by_id(self, id: int) -> Optional[Order]:
+    def find_by_id(self, id: int) -> Order | None:
         return self._orders.get(id)
     
-    def find_all(self) -> List[Order]:
+    def find_all(self) -> list[Order]:
         return list(self._orders.values())
     
-    def find_by_user(self, user_id: int) -> List[Order]:
+    def find_by_user(self, user_id: int) -> list[Order]:
         return [order for order in self._orders.values() if order.user_id == user_id]
 
 
@@ -145,11 +144,11 @@ class OrderStatusUpdateRepository(BaseRepository):
         self._updates[update.id] = update
         return update
     
-    def find_by_id(self, id: int) -> Optional[OrderStatusUpdate]:
+    def find_by_id(self, id: int) -> OrderStatusUpdate | None:
         return self._updates.get(id)
     
-    def find_all(self) -> List[OrderStatusUpdate]:
+    def find_all(self) -> list[OrderStatusUpdate]:
         return list(self._updates.values())
     
-    def find_by_order(self, order_id: int) -> List[OrderStatusUpdate]:
+    def find_by_order(self, order_id: int) -> list[OrderStatusUpdate]:
         return [update for update in self._updates.values() if update.order_id == order_id]
