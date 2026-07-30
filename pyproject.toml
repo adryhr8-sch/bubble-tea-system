@@ -1,0 +1,17 @@
+[tool.uv.workspace]
+members = [
+    "libs/database",
+    "libs/core",
+    "tests",
+    "libs/services",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.0",
+]
+
+[tool.behave]
+paths = [
+    "tests/features",
+]
